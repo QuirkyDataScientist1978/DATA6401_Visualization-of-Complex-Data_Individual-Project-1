@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<script src="https://gstatic.com/charts/loader.js"></script>
+	<script>
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(buildCharts);
+		
+		function buildCharts() {
+			drawCharts('CountryRealGDPGrowth_AnnualPercent', 'SELECT A,B,C,D,E,F,G',
+						  CountryRealGDPGrowth_AnnualPercentResponseHandler);
+			drawCharts('CountryRealGDPGrowth_AnnualPercent', 'SELECT A,G',
+						  randomCountryRealGDPGrowth_AnnualPercentResponseHandler);
+            drawCharts('CountryGDP', 'SELECT A,B,C,D,E,F,G',
+                          CountryGDPResponseHandler);
+			drawCharts('MEPercentOfGovernmentSpending', 'Select A,B,C,D,E,F,G',
+							MEPercentOfGovernmentSpendingResponseHandler);
+			drawCharts('MEPerCapitaMean', 'Select A,B,C,D,E,F,G',
+							MEPerCapitaMeanResponseHandler);
+			drawCharts('MEPercentGDP', 'Select A,B,C,D,E,F,G',
+							MEPercentGDPResponseHandler);
+			drawCharts('MEPerCapita', 'Select A,B,C,D,E,F,G',
+							MEPerCapitaResponseHandler);
+			drawCharts('CountryGovernmentEEPercentGDP', 'Select A,B,C,D,E,F,G',
+							CountryGovernmentEEPercentGDPResponseHandler);
+			drawCharts('EEPerCapitaGDP', 'Select A,G',
+							EEPerCapitaGDPResponseHandler);
+			drawCharts('HEPercentGDP', 'Select A,B,C,D,E,F,G',
+							HEPercentGDPResponseHandler);
+			drawCharts('HEPerCapitaGDP', 'Select A,B,C,D,E,F,G',
+							HEPerCapitaGDPResponseHandler);
+
+		} //buildAllCharts
+		
+		function drawCharts(chartName, query, responseHandler) {
+			var queryString = encodeURIComponent(query);
+			var query = new google.visualization.Query(
+				'https://docs.google.com/spreadsheets/d/19A54_R3JKC_j54_KiFKltiAaSuNqcsUWOM4DNfNMGNg/gviz/tq?sheet=' + chartName + '&headers=1&tq=' + queryString
+			);
+			
+            query.send(responseHandler);
+            
+		} //drawChartName
+		
+		function CountryRealGDPGrowth_AnnualPercentResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 6, desc:true}); //remember index starts at 0, so we point to column 7 (G) here
+			
+			//set options ; options is always an object
+			var options = {
+						   vAxis: {title: 'Real GDP Growth Annual %'},
+                           hAxis: {title: 'Random Comparison of 15 Countries Real GDP Growth (Annual Percentage)'},
+                           seriesType: 'bars',
+                           series: {15: {type: 'line'}},
+                           title: 'Random Comparison of 15 Countries Real GDP Growth (Annual Percentage)'
+            };
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ComboChart(document.getElementById('Real_GDP_Growth_by_Country_div'));
+			chart.draw(data, options);
+			
+		} //CountryRealGDPGrowth_AnnualPercentResponseHandler
+		
+		function randomCountryRealGDPGrowth_AnnualPercentResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			
+			//set the options
+			var options = {
+					
+					colorAxis: {colors: ['#3498DB', '#E74C3C']}, //Cool Blue to Bright Red Colors
+					title: 'Random Comparison of 15 Countries Real GDP Growth (Annual Percentage)'
+			};
+            //create chart and draw it
+            var chart = new google.visualization.GeoChart(document.getElementById('Random_Real_GDP_Growth_div'));
+			chart.draw(data, options);
+        } 		
+
+        function CountryGDPResponseHandler(response){
+			var data = response.getDataTable();
+			data.sort({column: 6, desc: true});
+			
+			var options = {
+                vAxis: {title: 'Country'},
+                hAxis: {title: 'Country GDP in Billions $'},
+				legend: {position: 'top', maxLines: 3},
+				bar: {groupWidth: '75%'},
+				isStacked: true
+			};
+			
+			var chart = new google.visualization.BarChart(document.getElementById('Country_GDP_div'));
+			chart.draw(data, options);
+        } //CountryGDPResponseHandler
+        
+        function MEPercentOfGovernmentSpendingResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 6, desc:true}); //remember index starts at 0, so we point to column 7 (G) here
+			
+			//set options ; options is always an object
+			var options = {
+						   vAxis: {title: 'Military Expenditures % of Government Spending'},
+                           hAxis: {title: 'Random Comparison of 15 Countries'},
+                           seriesType: 'bars',
+                           series: {15: {type: 'line'}},
+                           title: 'Random Comparison of 15 Countries Military Expenditures As A Percent Of Government Spending',
+            };
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ColumnChart(document.getElementById('ME_Percent_Government_Spending_div'));
+			chart.draw(data, options);
+			
+		} //MEPerCentOfGovernmentSpendingResponseHandler
+		function MEPerCapitaMeanResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 6, desc:true}); //remember index starts at 0, so we point to column 7 (G) here
+			
+			//set options ; options is always an object
+			var options = {
+						   vAxis: {title: 'Military Expeditures Per Capita Mean Of GDP in Millions $'},
+                           hAxis: {title: 'Country'},
+                           seriesType: 'bars',
+                           series: {15: {type: 'line'}},
+                           title: 'Random Comparison of 15 Countries Military Expenditures Per Capita Mean Of GDP',
+            };
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ColumnChart(document.getElementById('ME_Per_Capita_Mean_div'));
+			chart.draw(data, options);
+			
+		} //MEPerCapitaMeanResponseHandler
+		function MEPercentGDPResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 6, desc:true}); //remember index starts at 0, so we point to column 7 (G) here
+			
+			//set options ; options is always an object
+			var options = {
+						   vAxis: {title: 'Military Expeditures As A % of GDP'},
+                           hAxis: {title: 'Country'},
+                           seriesType: 'bars',
+                           series: {15: {type: 'line'}},
+                           title: 'Random Comparison of 15 Countries Military Expenditures As A Percent of GDP',
+            };
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ColumnChart(document.getElementById('ME_Percent_GDP_div'));
+			chart.draw(data, options);
+			
+		} //MEPercentGDPResponseHandler
+		function MEPerCapitaResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 6, desc:true}); //remember index starts at 0, so we point to column 7 (G) here
+			
+			//set options ; options is always an object
+			var options = {
+						   vAxis: {title: 'Military Expeditures Per Capita GDP in Millions $'},
+                           hAxis: {title: 'Country'},
+                           seriesType: 'bars',
+                           series: {15: {type: 'line'}},
+                           title: 'Random Comparison of 15 Countries Military Expenditures Per Capita GDP in Millions of Dollars',
+            };
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ColumnChart(document.getElementById('ME_Per_Capita_GDP_div'));
+			chart.draw(data, options);
+		} //MEPerCapitaResponseHandler
+		function CountryGovernmentEEPercentGDPResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 6, desc:true}); //remember index starts at 0, so we point to column 7 (G) here
+			
+			//set options ; options is always an object
+			var options = {
+						   vAxis: {title: 'Education Expenditures by the Government as a Percent of GDP'},
+                           hAxis: {title: 'Country'},
+                           seriesType: 'bars',
+                           series: {15: {type: 'line'}},
+                           title: 'Random Comparison of 15 Countries Education Expenses as a Percent of GDP',
+            };
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ColumnChart(document.getElementById('EE_Government_Percent_GDP_div'));
+			chart.draw(data, options);
+		} //EEGovernmentPercentGDPResponseHandler
+		function EEPerCapitaGDPResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			
+			//set the options
+			var options = {
+					
+					colorAxis: {colors: ['#039BE5', '#D81B60']}, //Cool Blue to Bright Red Colors
+					title: 'Random Comparison of 15 Countries Education Expenditures Per Capita GDP'
+			};
+            //create chart and draw it
+            var chart = new google.visualization.GeoChart(document.getElementById('EE_Per_Capita_GDP_div'));
+			chart.draw(data, options);
+        } 		
+		function HEPercentGDPResponseHandler(response){
+			//get the data
+			var data = response.getDataTable();
+			data.sort({column: 6, desc:true}); //remember index starts at 0, so we point to column 7 (G) here
+			
+			//set options ; options is always an object
+			var options = {
+						   vAxis: {title: 'Healthcare Expenditures as a Percent of GDP'},
+                           hAxis: {title: 'Country'},
+                           seriesType: 'bars',
+                           series: {15: {type: 'line'}},
+                           title: 'Random Comparison of 15 Countries Healthcare Expenses as a Percent of GDP',
+            };
+			
+			//create the chart and draw it
+			var chart = new google.visualization.ColumnChart(document.getElementById('HE_Percent_GDP_div'));
+			chart.draw(data, options);
+		} //HEPercentGDPResponseHandler
+
+		function HEPerCapitaGDPResponseHandler(response){
+			var data = response.getDataTable();
+			data.sort({column: 6, desc: true});
+			
+			var options = {
+                vAxis: {title: 'Country'},
+                hAxis: {title: 'Country Health Expenditure Per Capita GDP in Millions $'},
+				legend: {position: 'top', maxLines: 3},
+				bar: {groupWidth: '75%'},
+				isStacked: true
+			};
+			
+			var chart = new google.visualization.BarChart(document.getElementById('HE_Per_Capita_GDP_div'));
+			chart.draw(data, options);
+        } //HePerCapitaGDPResponseHandler		
+		
+
+
+	</script>
+</head>
+
+<body>
+	<h2>Aaron A. Gauthier</h2>
+	<h2>The George Washington University</h2>
+	<h2>M.S. in Data Science Program</h2>
+	<h2>DATS6401: Visualization of Complex Data</h2>
+	<h2>Individual Project 1</h2>
+	<h2>Due: 15 August 2019</h2>
+	<h2>Google Sheets --> Google Charts --> Google API for Data Visualization</h2>
+	<h2>                                                
+																		   
+		                                            
+	</h2>
+	<h2></h2>
+	<h1 style="text-align:center;"> 15 Country Spending Data by Military, Education, Healthcare & GDP Data</h1>
+	<h2 style="text-align:center;" >Introduction</h2>
+	<p style="text-align:left;" >This is my first try at making a website utilizing HTML and JavaScript and Google API for Visualization. We were told to gather our data, pre-process and visualize it using 
+	Google Charts API. I picked 15 countries to compare. The 15 countries I picked are as follows: Brazil, Canada, China, France, Germany, India, Italy, Japan, Poland, Russia, Saudi Arabia, South Korea, Turkey, United Kingdom
+	and the United States. I compared looked for trends in the Real GDP Growth, Country GDP, Military Expenditures, Educational Expenses and Healthcare Expenses as it relates to the countries spending as a total part of GDP. I tried using some different chart types to include Geo Maps, Stacked Charts, Combo Charts and Column Charts. There is only so much variation you can actually practice with this data. All of the
+	pre-processing of this data was completed in Google Sheets. I realize for the next project that we will have to complete the pre-processing utilizing computer code and other data mining techniques. The purpose of this 
+	project was to learn Google API more than it was to practice our ability to pre-process or even to build a gorgeous website. I have learned a lot already about the "art of the possible" with regards to web deisgn
+	and UI/UX development - the next project will be a lot better. Please see below for a very high level analysis of the data and its trends.
+</p>
+    <h2 style="text-align:center;" >Real GDP Growth Comparison</h2>
+	<div id="Real_GDP_Growth_by_Country_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;"> The Real GDP Growth comparison of the countries was quite interesting. If you look at the bar graphs, India seemed to lead overall for the real GDP growth annual percentage. Russia, Saudi Arabia, Brazil and Italy all experienced
+	some negative growth in one or more years. It was interesting to see that the United States was behind India, China and Poland in terms of growth. I believe the map view gives a slightly better graphic of overall growth.
+The "cooler" the color (blue) the less growth a country had and the "hotter" the color (red) means the country was growing rapidly compared to its closest peers. Some countries are growing whereas other countries are not.</p>
+	<div id="Random_Real_GDP_Growth_div" style="width: 2700px; height: 2000px;"></div>
+    <p style="text-align:center;"></p>
+    <h2 style="text-align:center;">Country GDP Comparison</h2>
+	<div id="Country_GDP_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;">If you looked at the stacked bar chart you can see that the United States leads the way in overall country GDP. This is definitely not surprising since the United States is overall one of
+	the most powerful economies in the entire world. It's nearest peers are China, Japan, Germany and the United Kingdom. The United States seems to be relatively similar in its year to year GDP accrual. Some countries seemed
+to be growing and others seem to be not growing. It's really hit or miss depending on the country.</p>
+	<h2 style="text-align:center;">Military Expenditures As A Percent Of Government Spending</h2>
+	<div id="ME_Percent_Government_Spending_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;" >Looking at the Military Expenditures by country as a percentage of their government spending it's interesting to see that Saudi Arabia outspends the rest of the countries listed. It's followed by 
+	its nearest peers South Korea, Russia and then the United States. The United States spending pales in comparison to Saudi Arabia and its nearest peers. I don't really see any trends overall. You have to look at each country
+individually and then you can the trends. It's a bit of a mixed bag. </p>
+	<h2 style="text-align:center;">Military Expenditures Per Capita Mean Of GDP</h2>
+	<div id="ME_Per_Capita_Mean_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;">Looking at Military Expenditures per capita mean of GDP it's interesting to see that the United States is second only to Saudi Arabia. Saudi Arabia still outspends the United States
+	by quite a bit. The nearest peers to these two are France, South Korea and hte United Kingdom. It's kind of a mixed bag with relative to other countries. Some seem to be increasing their spending and others seem to be
+decreasing their spending. </p>
+	<h2 style="text-align:center;">Military Expenditures As A Percent Of GDP</h2>
+	<div id="ME_Percent_GDP_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;">When you look at the Military Expenditures as a percentage of GDP you can see that overall Saudi Arabia is in the lead by quite a lot followed by Russia and the United States. It's a bit mixed between
+	countries. Every country seems to have a different trend based on world events and probably perceived threats.</p>
+	<h2 style="text-align:center;">Military Expenditures Per Capita GDP</h2>
+	<div id="ME_Per_Capita_GDP_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;">Looking at these graphs you can see that again Saudia Arabia is in the lead with the United States in second place followed by France, South Korea and the United Kingdom. This time Russia is much 
+	more distant than the top countries. Overall individual country trends are a mix. Some countries seem to be increasing, some holding steady while others are on the decline. This probably has a lot to do with world politics,
+and other events.</p>
+	<h2 style="text-align:center;">Education Expeditures by the Government as a Percent of GDP</h2>
+	<div id="EE_Government_Percent_GDP_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;">In looking at Education Expenditures as a pertage of GDP it's interesting to see that Brazil spends more than the rest of the world. The United Kingdom, France, Saudia Arabia then the United States. Most 
+	countries here seem to be either holding relatively steady at their spending levels while others are decreasing their spending. Only Brazil seems to be increasing its spending on education.</p>
+	<h2 style="text-align:center;">Education Expenditures Per Capita GDP</h2>
+	<div id="EE_Per_Capita_GDP_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;" >Looking at this Geo graph you can see that the "coolor" the color (blue) the lower the spending per capita while the "hotter" the color the more spending there is per capita. In this graph you can 
+	clearly see that the United States is the leader in the world based on per capita Education Expenditures. </p>
+	<h2 style="text-align:center;">Healthcare Expenditures Percent GDP</h2>
+	<div id="HE_Percent_GDP_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;" >The overall trends here are reflective of the above Education Expenditures so there may be a very interesting correlation between Education Expeditures and Healthcare Expenditures - though 
+	more research would have to be done in order to validate this. However the trends between the two seem to be quite similar.</p>
+	<h2 style="text-align:center;">Healthcare Expenditures Per Capita GDP</h2>
+	<div id="HE_Per_Capita_GDP_div" style="width: 2700px; height: 2000px;"></div>
+	<p style="text-align:left;">This graph is interesting when you look at the stacked graph you can clearly see that the United States overall spends more on Healthcare per capita than the rest of the world overall. I am certain a lot
+		of this may be due to the growing epidemic of obesity and other contributing reasons. This may actually be a good borometer of population health. Meaning the United States and The United Kingdom amongst others seem to spend
+		much more on healthcare but may actually be less healthy. This would be quite interesting to investigate in more detail.
+	</p>
+	<h2 style="text-align:center;">Overall Trends & Conclusion</h2>
+	<p style="text-align:left;">The overall trends are not all that surprising when you look at the world. What I did find surprising was that depending on my visualization it changed the way I looked at the analysis and the 
+	conclusions that I drew from it. If I had used a slightly different chat I may have had a different interpretation. It's very important to carefully plan out the visualizations that you will use to support your conclusions.
+In this exercise we didn't really have any thesis but were merely looking at superficial trends - however I can definitely see the importance of choosing your visualizations very wisely as they do have an effect on your analysis
+and the overall conclusions that you as a researcher and even your user community may have. Different conclusions may be drawn based off of certain charts. I learned to plan and choose my visualizations much more carefully! </p>
+	</body>
+</html>
